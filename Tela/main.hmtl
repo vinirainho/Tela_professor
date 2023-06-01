@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .info {
+      font-size: 16px;
+    }
+
+    .tabs {
+      background-color: #f2f2f2;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab-button {
+      background-color: #ccc;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .tab-button:hover {
+      background-color: #999;
+      transform: scale(1.05);
+    }
+
+    .tab-button.active {
+      background-color: #333;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .subtabs {
+      display: none;
+      padding-top: 10px;
+      justify-content: center;
+    }
+
+    .subtab-button {
+      background-color: #ccc;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .subtab-button:hover {
+      background-color: #999;
+      transform: scale(1.05);
+    }
+
+    .subtab-button.active {
+      background-color: #333;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .content {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .unimar-header {
+      background-color: #1E88E5;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .toggle-button {
+      background-color: #1E88E5;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .info-container {
+      display: none;
+    }
+
+    .info-container.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="unimar-header">
+    <h1>UNIMAR</h1>
+  </div>
+
+  <div class="header">
+    <div class="name">Nome do Professor</div>
+    <button class="toggle-button">Mostrar informações</button>
+    <div class="info-container">
+      <div class="info">Informações do Professor</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab">
+      <button class="tab-button active">Turma A</button>
+      <div class="subtabs">
+        <button class="subtab-button active">Chamada</button>
+        <button class="subtab-button">Alunos</button>
+        <button class="subtab-button">Justificativas</button>
+      </div>
+    </div>
+    <div class="tab">
+      <button class="tab-button">Turma B</button>
+      <div class="subtabs">
+        <button class="subtab-button active">Chamada</button>
+        <button class="subtab-button">Alunos</button>
+        <button class="subtab-button">Justificativas</button>
+      </div>
+    </div>
+    <div class="tab">
+      <button class="tab-button">Turma C</button>
+      <div class="subtabs">
+        <button class="subtab-button active">Chamada</button>
+        <button class="subtab-button">Alunos</button>
+        <button class="subtab-button">Justificativas</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <h2>Turma A - Chamada</h2>
+    <p>Conteúdo da Chamada da Turma A...</p>
+  </div>
+
+  <script>
+    // Obtém as abas principais
+    var tabs = document.querySelectorAll(".tab");
+
+    // Adiciona um ouvinte de evento a cada aba principal
+    tabs.forEach(function(tab) {
+      var tabButton = tab.querySelector(".tab-button");
+      var subtabs = tab.querySelector(".subtabs");
+
+      // Mostra as subopções ao clicar na aba principal
+      tabButton.addEventListener("click", function() {
+        tabs.forEach(function(tab) {
+          tab.classList.remove("active");
+        });
+        tab.classList.add("active");
+
+        var subtabs = tab.querySelector(".subtabs");
+        subtabs.style.display = subtabs.style.display === "none" ? "flex" : "none";
+      });
+
+      // Obtém os botões da subaba
+      var subtabButtons = subtabs.querySelectorAll(".subtab-button");
+
+      // Adiciona um ouvinte de evento a cada botão da subaba
+      subtabButtons.forEach(function(subtabButton) {
+        subtabButton.addEventListener("click", function() {
+          subtabButtons.forEach(function(btn) {
+            btn.classList.remove("active");
+          });
+          subtabButton.classList.add("active");
+
+          var tabContent = document.querySelector(".content");
+          tabContent.innerHTML = "<h2>" + tabButton.textContent + " - " + subtabButton.textContent + "</h2><p>Conteúdo da " + subtabButton.textContent + " da " + tabButton.textContent + "...</p>";
+        });
+      });
+    });
+
+    // Obtém o botão de alternância
+    var toggleButton = document.querySelector(".toggle-button");
+
+    // Obtém o contêiner de informações
+    var infoContainer = document.querySelector(".info-container");
+
+    // Adiciona um ouvinte de evento ao botão de alternância
+    toggleButton.addEventListener("click", function() {
+      infoContainer.classList.toggle("active");
+
+      if (infoContainer.classList.contains("active")) {
+        toggleButton.textContent = "Esconder informações";
+      } else {
+        toggleButton.textContent = "Mostrar informações";
+      }
+    });
+  </script>
+</body>
+</html>
