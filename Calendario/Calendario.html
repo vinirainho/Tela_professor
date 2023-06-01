@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .calendar-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .calendar {
+      position: absolute;
+      top: 30px;
+      left: 0;
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      display: none;
+    }
+
+    .calendar.active {
+      display: block;
+    }
+
+    .calendar .month {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .calendar .month-select {
+      margin-bottom: 10px;
+    }
+
+    .calendar .year-select {
+      margin-bottom: 10px;
+    }
+
+    .calendar .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+
+    .calendar .day {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      border: 1px solid #ccc;
+    }
+
+    .calendar .day-name {
+      font-weight: bold;
+    }
+
+    .calendar-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+      border-radius: 10px;
+    }
+
+    .calendar-button:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="calendar-container">
+    <button id="calendar-button" class="calendar-button">Calendário</button>
+    <div id="calendar" class="calendar">
+      <div class="month-select">
+        <label for="month">Escolha o mês:</label>
+        <select id="month">
+          <option value="1">Janeiro</option>
+          <option value="2">Fevereiro</option>
+          <option value="3">Março</option>
+          <option value="4">Abril</option>
+          <option value="5">Maio</option>
+          <option value="6">Junho</option>
+          <option value="7">Julho</option>
+          <option value="8">Agosto</option>
+          <option value="9">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+      </div>
+      <div class="year-select">
+        <label for="year">Escolha o ano:</label>
+        <select id="year">
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <!-- Adicione aqui mais opções de anos se desejar -->
+        </select>
+      </div>
+      <div class="days">
+        <div class="day-name">Seg</div>
+        <div class="day-name">Ter</div>
+        <div class="day-name">Qua</div>
+        <div class="day-name">Qui</div>
+        <div class="day-name">Sex</div>
+        <div class="day-name">Sáb</div>
+        <div class="day-name">Dom</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Obtém o botão, o calendário e os seletor de mês e ano
+    var button = document.getElementById("calendar-button");
+    var calendar = document.getElementById("calendar");
+    var monthSelect = document.getElementById("month");
+    var yearSelect = document.getElementById("year");
+
+    // Adiciona um ouvinte de evento ao botão para exibir/ocultar o calendário
+    button.addEventListener("click", function() {
+      calendar.classList.toggle("active");
+    });
+
+    // Adiciona um ouvinte de evento ao seletor de mês para atualizar o calendário
+    monthSelect.addEventListener("change", updateCalendar);
+    yearSelect.addEventListener("change", updateCalendar);
+
+    // Função para atualizar o calendário com o mês e ano selecionados
+    function updateCalendar() {
+      var selectedMonth = parseInt(monthSelect.value);
+      var monthName = monthSelect.options[monthSelect.selectedIndex].text;
+      var selectedYear = parseInt(yearSelect.value);
+      updateCalendarGrid(selectedMonth, monthName, selectedYear);
+    }
+
+    // Função para atualizar a grade de dias do calendário
+    function updateCalendarGrid(month, monthName, year) {
+      var daysContainer = document.querySelector(".calendar .days");
+      daysContainer.innerHTML = ""; // Limpa os dias anteriores
+
+      // Obtém o número de dias no mês selecionado
+      var daysInMonth = new Date(year, month, 0).getDate();
+
+      // Adiciona os dias da semana
+      var firstDayOfMonth = new Date(year, month - 1, 1);
+      var firstDayOfWeek = (firstDayOfMonth.getDay() + 6) % 7;
+      var dayNames = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
+      for (var i = 0; i < dayNames.length; i++) {
+        var dayNameElement = document.createElement("div");
+        dayNameElement.classList.add("day-name");
+        dayNameElement.textContent = dayNames[(i + 1) % 7];
+        daysContainer.appendChild(dayNameElement);
+      }
+
+      // Calcula o número de dias vazios no início do mês
+      var numEmptyDays = (firstDayOfWeek + 6) % 7;
+
+      // Adiciona os dias vazios no calendário
+      for (var i = 0; i < numEmptyDays; i++) {
+        var emptyDayElement = document.createElement("div");
+        emptyDayElement.classList.add("day", "empty");
+        daysContainer.appendChild(emptyDayElement);
+      }
+
+      // Adiciona os dias no calendário
+      for (var i = 1; i <= daysInMonth; i++) {
+        var dayElement = document.createElement("div");
+        dayElement.classList.add("day");
+        dayElement.textContent = i;
+        daysContainer.appendChild(dayElement);
+      }
+    }
+  </script>
+</body>
+</html>
